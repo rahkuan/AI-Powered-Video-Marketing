@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+        .upload-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="upload-container">
+    <h2>Upload Image</h2>
+    <input type="file" id="imageInput" accept="image/*">
+    <br>
+    <button onclick="uploadImage()">Upload</button>
+    <p id="message"></p>
+</div>
+
+<script>
+    function uploadImage() {
+        const input = document.getElementById('imageInput');
+        const file = input.files[0];
+        const formData = new FormData();
+        formData.append('image', file);
+
+        fetch('http://127.0.0.1:5000/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('message').textContent = data.message;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('message').textContent = 'Error uploading image';
+        });
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three-Column Layout</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .column {
+            flex: 1;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .left-column {
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .middle-column {
+            background-color: #ffffff;
+            border-left: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            overflow-y: auto;
+        }
+        .right-column {
+            background-color: #f9f9f9;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .upload-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 80%;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        button:hover {
+            transform: scale(1.02);
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 18px;
+            text-align: center;
+        }
+        .text-box-container {
+            position: relative;
+            width: 80%;
+            margin-top: 20px;
+        }
+        .text-box {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            resize: none;
+            transition: filter 0.3s ease, height 0.3s ease;
+            overflow: hidden;
+        }
+        .inactive {
+            filter: blur(4px);
+            pointer-events: none;
+        }
+        .stock-grid-container {
+            position: relative;
+            width: 80%;
+            margin-top: 20px;
+        }
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            transition: filter 0.3s ease;
+        }
+        .stock-grid img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 10px;
+        }
+        .stock-grid img.active {
+            border-color: #4caf50;
+        }
+        .radio-button {
+            position: absolute;
+            left: -30px;
+            top: 10px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .radio-input {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            margin-right: 5px;
+            outline: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .radio-input:checked {
+            border-color: #4caf50;
+            background-color: #4caf50;
+        }
+        .message {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        .style-image-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .style-image {
+            max-width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+        .divider {
+            width: 100%;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        .sub-sections {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .sub-section {
+            display: flex;
+            flex-direction: column;
+        }
+        .voiceover-section {
+            flex: 1;
+            margin-right: 10px;
+            align-items: flex-start;
+        }
+        .music-section {
+            flex: 0.6;
+            margin-left: 10px;
+            align-items: flex-end;
+        }
+        .sub-section input,
+        .sub-section select {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .product-description-section {
+            margin-bottom: 20px;
+        }
+        .product-description-input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .add-tags-section {
+            margin-bottom: 20px;
+        }
+        .add-tag-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        #tagInput {
+            flex: 1;
+            padding: 8px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #addTagButton {
+            padding: 8px;
+            cursor: pointer;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            border-radius: 5px;
+        }
+        #tagsList {
+            list-style: none;
+            padding: 0;
+        }
+        #tagsList li {
+            background-color: #e0e0e0;
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .recommend-section label {
+            margin: 5px 0;
+        }
+        .recommendation-text {
+            font-size: 14px;
+            color: #555;
+            margin: 5px 0 15px 0;
+        }
+        #recommendButton {
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #recommendButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Left Column -->
+<div class="column left-column">
+    <div class="upload-container">
+        <h2>Upload Image</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        <br>
+        <label>
+            <input type="checkbox" id="enhanceCheckbox"> Enhance Image
+        </label>
+        <br>
+        <button onclick="uploadImage()">Upload</button>
+        <p id="message"></p>
+    </div>
+</div>
+
+<!-- Middle Column -->
+<div class="column middle-column">
+    <div class="text-box-container">
+        <div class="section-title">Text prompt for style input</div>
+        <label class="radio-button">
+            <input type="radio" name="selection" class="radio-input" id="selectTextBox" checked onclick="selectTextBox()">
+        </label>
+        <textarea id="textBox" class="text-box" placeholder="Enter text..." rows="2" oninput="adjustTextBoxHeight()"></textarea>
+    </div>
+
+    <div class="stock-grid-container">
+        <div class="section-title">Choose an image style</div>
+        <label class="radio-button" style="top: -10px;">
+            <input type="radio" name="selection" class="radio-input" id="selectStockGrid" onclick="selectStockGrid()">
+        </label>
+        <div class="stock-grid" id="stockGrid"></div>
+    </div>
+
+    <button id="setStyleButton" onclick="setStyle()">Set style</button>
+    <p class="message" id="statusMessage"></p>
+
+    <div class="style-image-container">
+        <img id="styleImage" class="style-image" alt="Selected or Generated Style Image">
+    </div>
+
+    <button id="createVideoButton" onclick="createVideo()">Create Video</button>
+
+    <hr class="divider">
+
+    <!-- Sub-sections for voiceover and music type -->
+    <div class="sub-sections">
+        <div class="sub-section voiceover-section">
+            <label for="voiceoverText">Voiceover Text:</label>
+            <input type="text" id="voiceoverText" placeholder="Enter voiceover text...">
+        </div>
+        <div class="sub-section music-section">
+            <label for="musicType">Music Type:</label>
+            <select id="musicType">
+                <option value="ambient">Ambient</option>
+                <option value="jazz">Jazz</option>
+                <option value="classical">Classical</option>
+                <option value="rock">Rock</option>
+                <option value="electronic">Electronic</option>
+            </select>
+        </div>
+    </div>
+
+    <button id="enhanceVideoButton" onclick="enhanceVideo()">Enhance Video</button>
+</div>
+
+<!-- Right Column -->
+<div class="column right-column">
+    <h2>Right Column</h2>
+
+    <!-- Product Description Section -->
+    <div class="product-description-section">
+        <h3>Product Description</h3>
+        <input type="text" id="productDescription" placeholder="Enter product description..." class="product-description-input">
+    </div>
+
+    <!-- Add Tags Section -->
+    <div class="add-tags-section">
+        <h4>Describe the Person</h4> <!-- Explanation text above the tags -->
+        <div class="add-tag-container">
+            <input type="text" id="tagInput" placeholder="Enter a tag..." />
+            <button id="addTagButton">+</button> <!-- Add icon button -->
+        </div>
+        <ul id="tagsList"></ul> <!-- Display added tags here -->
+    </div>
+
+    <!-- Recommendation Section -->
+    <div class="recommend-section">
+        <h3>Recommendations</h3>
+        <label>
+            <input type="checkbox" id="recommendVoiceover" /> Recommend voiceover
+        </label>
+        <p id="recommendationVoiceoverText" class="recommendation-text"></p> <!-- Placeholder for recommended voiceover text -->
+
+        <label>
+            <input type="checkbox" id="recommendMusic" /> Recommend music background
+        </label>
+        <p id="recommendationMusicText" class="recommendation-text"></p> <!-- Placeholder for recommended music text -->
+
+        <button id="recommendButton">Recommend</button> <!-- Button to send data to backend -->
+    </div>
+</div>
+
+<script>
+    // JavaScript to handle adding tags
+    const tagsList = [];
+    const tagsListElement = document.getElementById('tagsList');
+    const addTagButton = document.getElementById('addTagButton');
+    const tagInput = document.getElementById('tagInput');
+
+    addTagButton.addEventListener('click', () => {
+        const tag = tagInput.value.trim();
+        if (tag && !tagsList.includes(tag)) {
+            tagsList.push(tag); // Add the tag to the list
+            const tagItem = document.createElement('li');
+            tagItem.textContent = tag;
+            tagsListElement.appendChild(tagItem); // Append tag to the list display
+            tagInput.value = ''; // Clear input field
+        }
+    });
+
+    // JavaScript to handle the Recommend button click
+    const recommendButton = document.getElementById('recommendButton');
+    recommendButton.addEventListener('click', () => {
+        const isRecommendVoiceover = document.getElementById('recommendVoiceover').checked;
+        const isRecommendMusic = document.getElementById('recommendMusic').checked;
+        const productDescription = document.getElementById('productDescription').value.trim();
+
+        // Create the data object to send to the backend
+        const data = {
+            tags: tagsList,
+            is_recommend_voiceover: isRecommendVoiceover,
+            is_recommend_music: isRecommendMusic,
+            product_description: productDescription
+        };
+
+        // Send the data to the backend
+        fetch('http://127.0.0.1:5000/recommend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(responseData => {
+            // Display the recommended voiceover text if provided
+            if (responseData.recommendation_voiceover_text) {
+                document.getElementById('recommendationVoiceoverText').textContent = responseData.recommendation_voiceover_text;
+            } else {
+                document.getElementById('recommendationVoiceoverText').textContent = '';
+            }
+
+            // Display the recommended music text if provided
+            if (responseData.recommendation_music_text) {
+                document.getElementById('recommendationMusicText').textContent = responseData.recommendation_music_text;
+            } else {
+                document.getElementById('recommendationMusicText').textContent = '';
+            }
+
+            alert('Recommendation submitted successfully!');
+        })
+        .catch(error => {
+            console.error('Error sending recommendation:', error);
+            alert('Failed to submit recommendation.');
+        });
+    });
+
+    // Existing JavaScript functions for your frontend
+    let isTextBoxActive = true;
+    let selectedImageSrc = '';
+    let selectedImageName = '';
+    let checkInterval = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchStockImages();
+        selectTextBox(); // Default selection
+    });
+
+    function fetchStockImages() {
+        fetch('http://127.0.0.1:5000/get-stock-images')
+            .then(response => response.json())
+            .then(images => {
+                const stockGrid = document.getElementById('stockGrid');
+                stockGrid.innerHTML = images.map(image => `<img src="/static/stock_images/${image}" data-filename="${image}" onclick="selectStockImage(this)">`).join('');
+            })
+            .catch(error => console.error('Error fetching stock images:', error));
+    }
+
+    function selectTextBox() {
+        isTextBoxActive = true;
+        document.getElementById('textBox').classList.remove('inactive');
+        document.getElementById('stockGrid').classList.add('inactive');
+        document.getElementById('selectTextBox').checked = true;
+        document.getElementById('selectStockGrid').checked = false;
+        selectedImageSrc = ''; // Reset selected image when switching to text box
+        selectedImageName = ''; // Reset selected image name
+        clearInterval(checkInterval); // Stop any ongoing checks
+    }
+
+    function selectStockGrid() {
+        isTextBoxActive = false;
+        document.getElementById('textBox').classList.add('inactive');
+        document.getElementById('stockGrid').classList.remove('inactive');
+        document.getElementById('selectTextBox').checked = false;
+        document.getElementById('selectStockGrid').checked = true;
+        clearInterval(checkInterval); // Stop any ongoing checks
+    }
+
+    function selectStockImage(img) {
+        document.querySelectorAll('.stock-grid img').forEach(image => image.classList.remove('active'));
+        img.classList.add('active');
+        selectedImageSrc = img.src; // Save the selected image source
+        selectedImageName = img.getAttribute('data-filename'); // Save the selected image file name
+        clearInterval(checkInterval); // Stop any ongoing checks
+    }
+
+    function adjustTextBoxHeight() {
+        const textBox = document.getElementById('textBox');
+        textBox.style.height = 'auto'; // Reset height
+        textBox.style.height = textBox.scrollHeight + 'px'; // Adjust to content
+    }
+
+    function setStyle() {
+        const statusMessage = document.getElementById('statusMessage');
+        const textBox = document.getElementById('textBox');
+        const prompt = textBox.value.trim();
+
+        if (!isTextBoxActive && selectedImageSrc) {
+            // Display the selected image when a stock image is chosen
+            displaySelectedImage(selectedImageSrc);
+            statusMessage.textContent = 'Displaying selected stock image.';
+        } else if (isTextBoxActive && prompt) {
+            statusMessage.textContent = 'Generating style image with Stable Diffusion...';
+            sendPromptToBackend(prompt);
+        } else {
+            statusMessage.textContent = 'Please select the text box and enter a prompt.';
+        }
+    }
+
+    function displaySelectedImage(imageSrc) {
+        const styleImage = document.getElementById('styleImage');
+        styleImage.src = imageSrc;
+        styleImage.style.display = 'block'; // Ensure the image is shown
+        document.getElementById('statusMessage').textContent = 'Selected image displayed successfully.';
+    }
+
+    function sendPromptToBackend(prompt) {
+        fetch('http://127.0.0.1:5000/generate-style-image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prompt: prompt }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            const imageFileName = data.image_file_name;
+            startCheckingImageAvailability(imageFileName);
+        })
+        .catch(error => {
+            console.error('Error generating style image:', error);
+            document.getElementById('statusMessage').textContent = 'Error generating style image.';
+        });
+    }
+
+    function startCheckingImageAvailability(imageFileName) {
+        clearInterval(checkInterval); // Clear any existing intervals before starting a new one
+        checkInterval = setInterval(() => {
+            fetch(`http://127.0.0.1:5000/check-image-availability?image_file_name=${imageFileName}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.available) {
+                        clearInterval(checkInterval); // Stop checking once the image is available
+                        displayGeneratedImage(imageFileName);
+                    }
+                })
+                .catch(error => {
+                    console.log('Checking for image availability...');
+                });
+        }, 2000);
+    }
+
+    function displayGeneratedImage(imageFileName) {
+        const styleImage = document.getElementById('styleImage');
+        const timestamp = new Date().getTime(); // Add timestamp to prevent caching
+        styleImage.src = `/generated-images/${imageFileName}?t=${timestamp}`;
+        styleImage.onload = function() {
+            styleImage.style.display = 'block'; // Show the image after it has loaded successfully
+            document.getElementById('statusMessage').textContent = 'Style image generated successfully!';
+        };
+        styleImage.onerror = function() {
+            document.getElementById('statusMessage').textContent = 'Failed to load generated image.';
+        };
+    }
+
+    function uploadImage() {
+        const input = document.getElementById('imageInput');
+        const file = input.files[0];
+        const enhance = document.getElementById('enhanceCheckbox').checked;
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('enhance', enhance);
+
+        fetch('http://127.0.0.1:5000/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('message').textContent = data.message;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('message').textContent = 'Error uploading image';
+        });
+    }
+
+    function createVideo() {
+        // Only handles video creation, not involving voiceover or music selection
+        if (!isTextBoxActive && !selectedImageName) {
+            alert("Please select an image or enter a prompt.");
+            return;
+        }
+        alert('Create Video button clicked. Process the video without voiceover or music enhancement.');
+        // Implement your backend call for video creation if needed
+    }
+
+    function enhanceVideo() {
+        // Fetch VoiceOver text and selected music type
+        const voiceoverText = document.getElementById('voiceoverText').value.trim();
+        const musicType = document.getElementById('musicType').value;
+
+        if (!voiceoverText) {
+            alert("Please enter voiceover text.");
+            return;
+        }
+
+        // Send voiceover text and music type to backend
+        fetch('http://127.0.0.1:5000/enhance-video', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                voiceover_text: voiceoverText,
+                music_type: musicType
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.message || 'Video enhancement completed.');
+        })
+        .catch(error => {
+            console.error('Error enhancing video:', error);
+            alert('Error enhancing video.');
+        });
+    }
+</script>
+
+</body>
+</html>
