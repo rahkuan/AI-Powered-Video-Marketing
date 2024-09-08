@@ -123,7 +123,7 @@ Open web browser and go to `http://127.0.0.1:5000`
 
 ## Result: Demo Video
 
-The demo ad video with voice and music showcasing a watch can be found at 'generated_videos/enhanced_output-upscaled-with-prompt.mp4'
+The demo of ad video with voice and music showcasing a watch can be found at 'generated_videos/enhanced_output-upscaled-with-prompt.mp4'
 
 ## Development Guidelines:
 
