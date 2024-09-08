@@ -1,0 +1,31 @@
+conda create -n aivideo python=3.9
+pip install flask flask-restful
+pip install torch==2.0.1 torchvision==0.15.2
+
+# pip install --use-pep517 realesrgan
+git clone https://github.com/xinntao/Real-ESRGAN.git
+cd Real-ESRGAN
+
+# Install basicsr - https://github.com/xinntao/BasicSR
+# We use BasicSR for both training and inference
+pip install basicsr
+# facexlib and gfpgan are for face enhancement
+pip install facexlib
+pip install gfpgan
+pip install -r requirements.txt
+python setup.py develop
+
+pip install numpy==1.26.4
+wget https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth -P weights
+
+pip install transformers diffusers pillow
+pip install accelerate
+pip install peft
+
+# 1min50secs for animatediff to create video on T4 GPU with 16GB GPU-RAM
+# slowness on MacBook of 8GB RAM because 25GB memory required, It would take 12hours to create
+
+pip install soundfile moviepy coqui-tts pydub librosa
+
+pip install -qU langchain-openai
+export OPENAI_API_KEY=your-api-key-here 
